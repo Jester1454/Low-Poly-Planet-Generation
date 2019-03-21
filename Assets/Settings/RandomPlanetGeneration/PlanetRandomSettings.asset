@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48e6f39d0ef0fe64f8394fdec2438d52, type: 3}
   m_Name: PlanetRandomSettings
   m_EditorClassIdentifier: 
-  _resolution: 14
+  _resolution: 25
   _baseMaterial: {fileID: 2100000, guid: af09971ce86f3a942ac8b2f91ac15789, type: 2}

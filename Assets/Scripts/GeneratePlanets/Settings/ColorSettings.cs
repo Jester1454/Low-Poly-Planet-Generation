@@ -9,18 +9,21 @@ namespace GeneratePlanets.Settings
         [NonSerialized] public Material PlanetMaterial;
         [SerializeField] private Gradient _oceanGradient;
         [SerializeField] private BiomeColourSettings _biomeColourSettings;
-
-        public ColorSettings(Material planetMaterial, Gradient oceanGradient, BiomeColourSettings biomeColourSettings)
+        [SerializeField] private Color _atmoshpereColor;
+        
+        public ColorSettings(Material planetMaterial, Gradient oceanGradient, BiomeColourSettings biomeColourSettings, Color atmoshpereColor)
         {
             PlanetMaterial = planetMaterial;
             _oceanGradient = oceanGradient;
             _biomeColourSettings = biomeColourSettings;
+            _atmoshpereColor = atmoshpereColor;
         }        
         
-        public ColorSettings(Gradient oceanGradient, BiomeColourSettings biomeColourSettings)
+        public ColorSettings(Gradient oceanGradient, BiomeColourSettings biomeColourSettings, Color atmoshpereColor)
         {
             _oceanGradient = oceanGradient;
             _biomeColourSettings = biomeColourSettings;
+            _atmoshpereColor = atmoshpereColor;
         }
 
         public BiomeColourSettings BiomeColorSettings
@@ -31,6 +34,11 @@ namespace GeneratePlanets.Settings
         public Gradient OceanGradient
         {
             get { return _oceanGradient; }
+        }
+        
+        public Color AtmoshpereColor
+        {
+            get { return _atmoshpereColor; }
         }
     }
 }

@@ -15,6 +15,8 @@ namespace GeneratePlanets.RandomGeneration
         [SerializeField] private List<Color> _tintColors;
         [SerializeField] private SimpleNoiseSettings _minNoiseFilter;
         [SerializeField] private SimpleNoiseSettings _maxNoiseFilter;
+        [SerializeField] private List<Color> _atmosphereColors;
+        
         
         public ColorSettings GetRandomColorSettings()
         {
@@ -66,8 +68,9 @@ namespace GeneratePlanets.RandomGeneration
                NoiseStrength = Random.Range(0f,1f),
             };
             Material planetMaterila = new Material(_material);
-            
-            return new ColorSettings(planetMaterila, _oceanGradients[Random.Range(0, _oceanGradients.Count-1)], biomeColourSettings);
+
+            return new ColorSettings(planetMaterila, _oceanGradients[Random.Range(0, _oceanGradients.Count - 1)],
+                biomeColourSettings, _atmosphereColors[Random.Range(0, _atmosphereColors.Count - 1)]);
         }
     }
 }

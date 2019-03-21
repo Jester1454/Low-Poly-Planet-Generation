@@ -85,8 +85,9 @@ namespace GeneratePlanets
             Initialize();
             GenerateMesh();
             GenerateColors();
-//            CombineMesh(_meshFilters);
-        }      
+            CombineMesh(_meshFilters);
+            
+        }
         
         private void GenerateMesh()
         {
