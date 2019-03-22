@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using Animations;
 using GeneratePlanets.RandomGeneration;
 using GeneratePlanets.Settings;
 using UnityEngine;
@@ -16,6 +18,7 @@ namespace GeneratePlanets
         private TerrainFace[] _terrainFaces;
         private ShapeGenerator _shapeGenerator = new ShapeGenerator();
         private ColorGenerator _colorGenerator = new ColorGenerator();
+        private GameObject _atmosphere;
         
         public ShapeSettings ShapeSettings
         {
@@ -50,11 +53,9 @@ namespace GeneratePlanets
             {
                 if (_meshFilters[i] == null)
                 {
-                    GameObject meshObj = new GameObject("mesh");
-                    meshObj.transform.parent = transform;
+                    GameObject meshObj = Instantiate(_planetSettings.FacePrefab, transform);
                     
-                    meshObj.AddComponent<MeshRenderer>();
-                    _meshFilters[i] = meshObj.AddComponent<MeshFilter>();
+                    _meshFilters[i] = meshObj.GetComponent<MeshFilter>();
                     _meshFilters[i].sharedMesh = new Mesh();
                 }
                 _meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = _colorSettings.PlanetMaterial;
@@ -70,9 +71,18 @@ namespace GeneratePlanets
             GenerateColors();
         }      
                 
+        private IEnumerator CreateAtmoshere(ShapeSettings shapeSettings, ColorSettings colorSettings, PlanetSettings planetSettings, Transform planet)
+        {
+            _atmosphere = Instantiate(planetSettings.AtmospherePrefab, planet);
+            Material material = _atmosphere.GetComponent<MeshRenderer>().material;
+            material.SetColor("Color_8BBDCD19", colorSettings.AtmoshpereColor);
+            _atmosphere.transform.localScale *= (shapeSettings.PlanerRadius * 2 + planetSettings.AtmosphereOffset);
+
+            yield return StartCoroutine(_atmosphere.GetComponent<SimpleGrowingVertexAnimation>().PlayAnimation());
+        }
         
-        public void GeneratePlanet(ColorSettings colorSettings, ShapeSettings shapeSettings, 
-            PlanetSettings planetSettings, bool materialFromPlanet = false)
+        public IEnumerator GeneratePlanet(ColorSettings colorSettings, ShapeSettings shapeSettings, 
+            PlanetSettings planetSettings, bool materialFromPlanet = false, bool startCreateAnimation = true)
         {
             _colorSettings = colorSettings;
             if (materialFromPlanet)
@@ -85,8 +95,39 @@ namespace GeneratePlanets
             Initialize();
             GenerateMesh();
             GenerateColors();
-            CombineMesh(_meshFilters);
+            if (startCreateAnimation)
+            {
+               yield return StartCoroutine(CreateAnimation());
+            }
+
+           yield return StartCoroutine(CreateAtmoshere(_shapeSettings, _colorSettings, _planetSettings, transform));
+        }
+
+        public IEnumerator CreateAnimation()
+        {
+            Vector3[] directions =
+                {Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back};
+            for (int i = 0; i < _meshFilters.Length-1; i++)
+            {
+                StartCoroutine(_meshFilters[i].gameObject.GetComponent<FaceAnimation>().PlayCreateAnimation(transform.position, directions[i]));
+            }
+
+            yield return StartCoroutine(_meshFilters[_meshFilters.Length - 1].gameObject.GetComponent<FaceAnimation>()
+                .PlayCreateAnimation(transform.position, directions[directions.Length -1]));
+
+        }        
+        
+        public IEnumerator DestroyAnimation()
+        {
+            for (int i = 0; i < _meshFilters.Length-1; i++)
+            {
+                StartCoroutine(_meshFilters[i].gameObject.GetComponent<FaceAnimation>().PlayDestroyAnimation());
+            }
+
+            yield return StartCoroutine(_meshFilters[_meshFilters.Length - 1].gameObject.GetComponent<FaceAnimation>()
+                .PlayDestroyAnimation());
             
+            yield return StartCoroutine(_atmosphere.GetComponent<DisolveAnimation>().PlayAnimation());
         }
         
         private void GenerateMesh()

@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _resolution: 25
   _baseMaterial: {fileID: 2100000, guid: af09971ce86f3a942ac8b2f91ac15789, type: 2}
+  _facePrefab: {fileID: 2869041796038033951, guid: 0a2d61c1bd2c5d34e9e784cfaa28d6e5,
+    type: 3}
+  _atmospherePrefab: {fileID: 7629679542796394707, guid: 49d98af270b96e147930d0992e8a3ffc,
+    type: 3}
+  _atmosphereOffset: 0.4

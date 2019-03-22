@@ -1,4 +1,5 @@
-﻿using Animations;
+﻿using System.Collections;
+using Animations;
 using GeneratePlanets.Settings;
 using UnityEngine;
 
@@ -10,8 +11,7 @@ namespace GeneratePlanets.RandomGeneration
         [SerializeField] private PlanetSettings _planetSettings;
         [SerializeField] private ColorRandomSettings _colorSettings;
         [SerializeField] private GameObject _planetPrefab;
-        [SerializeField] private GameObject _atmospherePrefab;
-        
+        private bool _isAnimate;
         private Planet _currentPlanet;
         
         private void Awake()
@@ -21,35 +21,35 @@ namespace GeneratePlanets.RandomGeneration
 
         public void GenerateRandomPlanet()
         {
-            DestroyCurrentPlanet();
+            if (_isAnimate)
+            {
+                return;;
+            }
+           StartCoroutine(AnimatedGenerateRandomPlanet());
+        }
+
+        private IEnumerator AnimatedGenerateRandomPlanet()
+        {
+            _isAnimate = true;
+            yield return StartCoroutine(DestroyCurrentPlanetAnimation());
+            
             GameObject planetGameObject = Instantiate(_planetPrefab);
             Planet planet = planetGameObject.AddComponent<Planet>();
 
             ColorSettings colorSettings = _colorSettings.GetRandomColorSettings();
             ShapeSettings shapeSettings = _randomSettings.GetRandomShapeSettings();
             
-            planet.GeneratePlanet(colorSettings, shapeSettings, _planetSettings);
+            yield return StartCoroutine(planet.GeneratePlanet(colorSettings, shapeSettings, _planetSettings));
             _currentPlanet = planet;
-            CreateAtmoshere(shapeSettings, colorSettings, planet.transform);
-            
-//            return planet;
+            _isAnimate = false;
         }
 
-        private void CreateAtmoshere(ShapeSettings shapeSettings, ColorSettings colorSettings, Transform planet)
-        {
-            GameObject atmosphere = Instantiate(_atmospherePrefab, planet);
-            Material material = atmosphere.GetComponent<MeshRenderer>().material;
-            material.SetVector("AtmoshereColor", colorSettings.AtmoshpereColor);
-            atmosphere.transform.localScale *= (shapeSettings.PlanerRadius * 2 + 0.3f);
-        }
-        
         public void SavePlanet()
         {
             PlanetSaver saver = new PlanetSaver();
             saver.SavePlanet(_currentPlanet);
         }
 
-        
         public void LoadPlanet()
         {
             PlanetSaver planetSaver = new PlanetSaver();
@@ -58,9 +58,28 @@ namespace GeneratePlanets.RandomGeneration
 
         public void DestroyCurrentPlanet()
         {
+            if (_isAnimate)
+            {
+                return;;
+            }
             if (_currentPlanet!=null)
             {
-                Destroy(_currentPlanet.gameObject);    
+                StartCoroutine(DestroyCurrentPlanetAnimation());
+            }
+        }
+
+        private IEnumerator DestroyCurrentPlanetAnimation()
+        {
+            if (_currentPlanet != null)
+            {
+                _isAnimate = true;
+                if (_currentPlanet != null)
+                {
+                    yield return StartCoroutine(_currentPlanet.DestroyAnimation());
+                    Destroy(_currentPlanet.gameObject);
+                }
+
+                _isAnimate = false;
             }
         }
     }    

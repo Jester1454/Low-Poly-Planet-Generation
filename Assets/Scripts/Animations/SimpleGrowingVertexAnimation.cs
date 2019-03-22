@@ -7,6 +7,15 @@ namespace Animations
     {
         [SerializeField] private AnimationCurve _curve;
         [SerializeField] private float _speed;
+        [SerializeField] private bool _autostart;
+        
+        private void Awake()
+        {
+            if (_autostart)
+            {
+                StartCoroutine(PlayAnimation());
+            }
+        }
         
         public IEnumerator PlayAnimation()
         {
