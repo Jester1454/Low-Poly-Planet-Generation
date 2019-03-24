@@ -71,36 +71,41 @@ namespace GeneratePlanets
             GenerateColors();
         }      
                 
-        private IEnumerator CreateAtmoshere(ShapeSettings shapeSettings, ColorSettings colorSettings, PlanetSettings planetSettings, Transform planet)
+        private void CreateAtmoshere(ShapeSettings shapeSettings, ColorSettings colorSettings, PlanetSettings planetSettings, Transform planet)
         {
             _atmosphere = Instantiate(planetSettings.AtmospherePrefab, planet);
             Material material = _atmosphere.GetComponent<MeshRenderer>().material;
             material.SetColor("Color_8BBDCD19", colorSettings.AtmoshpereColor);
             _atmosphere.transform.localScale *= (shapeSettings.PlanerRadius * 2 + planetSettings.AtmosphereOffset);
-
-            yield return StartCoroutine(_atmosphere.GetComponent<SimpleGrowingVertexAnimation>().PlayAnimation());
+            _atmosphere.SetActive(false);
         }
-        
-        public IEnumerator GeneratePlanet(ColorSettings colorSettings, ShapeSettings shapeSettings, 
-            PlanetSettings planetSettings, bool materialFromPlanet = false, bool startCreateAnimation = true)
+
+        public void GeneratePlanet(ColorSettings colorSettings, ShapeSettings shapeSettings,
+            PlanetSettings planetSettings, bool materialFromPlanet = false)
         {
             _colorSettings = colorSettings;
             if (materialFromPlanet)
             {
                 _colorSettings.PlanetMaterial = planetSettings.Material;
             }
+
             _shapeSettings = shapeSettings;
             _planetSettings = planetSettings;
-            
+
             Initialize();
             GenerateMesh();
             GenerateColors();
+            CreateAtmoshere(_shapeSettings, _colorSettings, _planetSettings, transform);
+        }
+
+        public IEnumerator GeneratePlanet(ColorSettings colorSettings, ShapeSettings shapeSettings, 
+            PlanetSettings planetSettings, bool materialFromPlanet, bool startCreateAnimation)
+        {
+            GeneratePlanet(colorSettings, shapeSettings, planetSettings, materialFromPlanet);
             if (startCreateAnimation)
             {
                yield return StartCoroutine(CreateAnimation());
             }
-
-           yield return StartCoroutine(CreateAtmoshere(_shapeSettings, _colorSettings, _planetSettings, transform));
         }
 
         public IEnumerator CreateAnimation()
@@ -114,7 +119,8 @@ namespace GeneratePlanets
 
             yield return StartCoroutine(_meshFilters[_meshFilters.Length - 1].gameObject.GetComponent<FaceAnimation>()
                 .PlayCreateAnimation(transform.position, directions[directions.Length -1]));
-
+            _atmosphere.SetActive(true);
+            yield return StartCoroutine(_atmosphere.GetComponent<SimpleGrowingVertexAnimation>().PlayAnimation());
         }        
         
         public IEnumerator DestroyAnimation()

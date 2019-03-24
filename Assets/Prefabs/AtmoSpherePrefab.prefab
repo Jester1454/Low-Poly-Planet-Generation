@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1592955590042225466}
   - component: {fileID: 7671130322654351485}
   - component: {fileID: 7893447904953428704}
-  - component: {fileID: 3637455210960008182}
+  - component: {fileID: 4467111547571009786}
   m_Layer: 0
   m_Name: AtmoSpherePrefab
   m_TagString: Untagged
@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7629679542796394707}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.040562868, y: -0.020943165, z: 0.0905776}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -152,7 +152,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _speed: 30
   _autostart: 0
---- !u!114 &3637455210960008182
+--- !u!114 &4467111547571009786
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,6 +164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06268ce1f775e5542a09403fc8c1cd21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _disolveMaterial: {fileID: 2100000, guid: 627ade7b240ef2848a6fa415f67dc03d, type: 2}
+  _disolveMaterial: {fileID: 2100000, guid: b622adbd742617b458ca04f4000a75c2, type: 2}
   _duration: 0.5
   _autostart: 0

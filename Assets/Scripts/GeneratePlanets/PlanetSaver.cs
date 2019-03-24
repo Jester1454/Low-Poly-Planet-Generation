@@ -19,7 +19,7 @@ namespace GeneratePlanets
         {
             string	colorSavePath = Path.Combine(_path, "ColorPlanet.json");
             string	shapeSavePath = Path.Combine(_path, "ShapePlanet.json");
-            
+
             ColorSettings colorSettings = LoadObjectFromJSON.Load<ColorSettings>(colorSavePath);
             ShapeSettings shapeSettings = LoadObjectFromJSON.Load<ShapeSettings>(shapeSavePath);
            

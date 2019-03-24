@@ -23,44 +23,67 @@ namespace GeneratePlanets.RandomGeneration
         {
             if (_isAnimate)
             {
-                return;;
+                return;
             }
+            _isAnimate = true;
            StartCoroutine(AnimatedGenerateRandomPlanet());
         }
 
         private IEnumerator AnimatedGenerateRandomPlanet()
         {
-            _isAnimate = true;
             yield return StartCoroutine(DestroyCurrentPlanetAnimation());
-            
+            _isAnimate = true;
+
             GameObject planetGameObject = Instantiate(_planetPrefab);
             Planet planet = planetGameObject.AddComponent<Planet>();
 
             ColorSettings colorSettings = _colorSettings.GetRandomColorSettings();
             ShapeSettings shapeSettings = _randomSettings.GetRandomShapeSettings();
             
-            yield return StartCoroutine(planet.GeneratePlanet(colorSettings, shapeSettings, _planetSettings));
+            yield return StartCoroutine(planet.GeneratePlanet(colorSettings, shapeSettings, _planetSettings, false, true));
             _currentPlanet = planet;
+          
+            yield return new WaitForEndOfFrame();
             _isAnimate = false;
         }
 
         public void SavePlanet()
         {
-            PlanetSaver saver = new PlanetSaver();
-            saver.SavePlanet(_currentPlanet);
+            if (_currentPlanet != null)
+            {
+                PlanetSaver saver = new PlanetSaver();
+                saver.SavePlanet(_currentPlanet);
+            }
         }
 
         public void LoadPlanet()
         {
+            if (_isAnimate)
+            {
+                return;
+            }
+            StartCoroutine(AnimatedLoadPlanet());
+        }
+
+        private IEnumerator AnimatedLoadPlanet()
+        {
+            _isAnimate = true;
             PlanetSaver planetSaver = new PlanetSaver();
+
+            yield return StartCoroutine(DestroyCurrentPlanetAnimation());
+            _isAnimate = true;
             _currentPlanet = planetSaver.LoadPlanet(_planetSettings, true);
+            yield return StartCoroutine(_currentPlanet.CreateAnimation());
+            yield return new WaitForEndOfFrame();
+
+            _isAnimate = false;
         }
 
         public void DestroyCurrentPlanet()
         {
             if (_isAnimate)
             {
-                return;;
+                return;
             }
             if (_currentPlanet!=null)
             {
@@ -70,17 +93,18 @@ namespace GeneratePlanets.RandomGeneration
 
         private IEnumerator DestroyCurrentPlanetAnimation()
         {
+            _isAnimate = true;
+
             if (_currentPlanet != null)
             {
-                _isAnimate = true;
                 if (_currentPlanet != null)
                 {
                     yield return StartCoroutine(_currentPlanet.DestroyAnimation());
                     Destroy(_currentPlanet.gameObject);
                 }
-
-                _isAnimate = false;
             }
+            yield return new WaitForEndOfFrame();
+            _isAnimate = false;
         }
     }    
 }

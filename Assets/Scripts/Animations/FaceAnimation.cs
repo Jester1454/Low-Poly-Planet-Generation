@@ -21,17 +21,31 @@ namespace Animations
             
             _offsetPosition = newCoordinate;
             transform.position = newCoordinate;
+            if (_appearenceAnimation != null)
+            {
+                yield return StartCoroutine(_appearenceAnimation.PlayAnimation());
+            }
 
-            yield return StartCoroutine(_appearenceAnimation.PlayAnimation());
-            yield return StartCoroutine(_movementAnimation.PlayAnimation(newCoordinate, currentCoordinate));
+            if (_movementAnimation != null)
+
+            {
+                yield return StartCoroutine(_movementAnimation.PlayAnimation(newCoordinate, currentCoordinate));
+            }
         }        
         
         public IEnumerator PlayDestroyAnimation()
         {
             Vector3 newCoordinate = _offsetPosition;
-            
-            yield return StartCoroutine(_movementAnimation.PlayAnimation(transform.position, newCoordinate));
-            yield return StartCoroutine(_disolveAnimation.PlayAnimation());
+
+            if (_movementAnimation != null)
+            {
+                yield return StartCoroutine(_movementAnimation.PlayAnimation(transform.position, newCoordinate));
+            }
+
+            if (_disolveAnimation != null)
+            {
+                yield return StartCoroutine(_disolveAnimation.PlayAnimation());
+            }
         }
     }
 }
