@@ -167,4 +167,4 @@ MonoBehaviour:
   _autostart: 0
   _from: {x: 0, y: 0, z: 0}
   _to: {x: 0, y: 0, z: 0}
-  _duration: 1
+  _duration: 0.5

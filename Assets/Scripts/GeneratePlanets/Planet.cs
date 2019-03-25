@@ -3,6 +3,7 @@ using System.Collections;
 using Animations;
 using GeneratePlanets.RandomGeneration;
 using GeneratePlanets.Settings;
+using MovementScripts;
 using UnityEngine;
 
 namespace GeneratePlanets
@@ -110,6 +111,12 @@ namespace GeneratePlanets
 
         public IEnumerator CreateAnimation()
         {
+            RotateAround rotateAround = GetComponent<RotateAround>();
+            if (rotateAround != null)
+            {
+                rotateAround.Speed *= 35;
+            }
+            
             Vector3[] directions =
                 {Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back};
             for (int i = 0; i < _meshFilters.Length-1; i++)
@@ -119,21 +126,31 @@ namespace GeneratePlanets
 
             yield return StartCoroutine(_meshFilters[_meshFilters.Length - 1].gameObject.GetComponent<FaceAnimation>()
                 .PlayCreateAnimation(transform.position, directions[directions.Length -1]));
+                        
+            if (rotateAround != null)
+            {
+                rotateAround.Speed /= 35;
+            }
+            
             _atmosphere.SetActive(true);
-            yield return StartCoroutine(_atmosphere.GetComponent<SimpleGrowingVertexAnimation>().PlayAnimation());
+            yield return StartCoroutine(_atmosphere.GetComponent<AtmosphereAnimation>().PlayCreateAnimation());
         }        
         
         public IEnumerator DestroyAnimation()
         {
+            RotateAround rotateAround = GetComponent<RotateAround>();
+            if (rotateAround != null)
+            {
+                rotateAround.Speed *= -50;
+            }
             for (int i = 0; i < _meshFilters.Length-1; i++)
             {
                 StartCoroutine(_meshFilters[i].gameObject.GetComponent<FaceAnimation>().PlayDestroyAnimation());
             }
-
+                        
             yield return StartCoroutine(_meshFilters[_meshFilters.Length - 1].gameObject.GetComponent<FaceAnimation>()
                 .PlayDestroyAnimation());
-            
-            yield return StartCoroutine(_atmosphere.GetComponent<DisolveAnimation>().PlayAnimation());
+            yield return StartCoroutine(_atmosphere.GetComponent<AtmosphereAnimation>().PlayDestroyAnimation());
         }
         
         private void GenerateMesh()

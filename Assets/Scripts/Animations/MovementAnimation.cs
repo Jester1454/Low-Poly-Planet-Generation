@@ -11,7 +11,7 @@ namespace Animations
         [SerializeField] private Vector3 _from;
         [SerializeField] private Vector3 _to;
         [SerializeField] private float _duration;
-        
+
         private void Awake()
         {
             if (_autostart)

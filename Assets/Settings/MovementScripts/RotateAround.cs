@@ -9,6 +9,12 @@ namespace MovementScripts
         [SerializeField] private float _speed;
         [SerializeField] private Vector3 _rotationAxis;
         [SerializeField] private Vector3 _pointRotation;
+                
+        public float Speed
+        {
+            get { return _speed; }
+            set { _speed = value; }
+        }
         
         private void Awake()
         {

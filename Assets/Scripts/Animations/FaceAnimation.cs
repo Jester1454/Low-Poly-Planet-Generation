@@ -11,7 +11,6 @@ namespace Animations
         [SerializeField] private DisolveAnimation _disolveAnimation;
         private Vector3 _offsetPosition;
         
-        
         public IEnumerator PlayCreateAnimation(Vector3 planetCenter, Vector3 direction)
         {
             Vector3 currentCoordinate = transform.position;
