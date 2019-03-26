@@ -17,7 +17,7 @@ namespace Animations
             if (_explosionCreate != null)
             {
                 explosion = Instantiate(_explosionCreate);
-              //  explosion.Play();
+                explosion.Play();
             }
             
             if (_growingVertexAnimation != null)
