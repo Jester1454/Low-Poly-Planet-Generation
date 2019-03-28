@@ -95,7 +95,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _growingVertexAnimation: {fileID: 7893447904953428704}
   _scaleAnimation: {fileID: 4749400941857789714}
-  _explosion: {fileID: 11484356, guid: 7921a819dda7db94a836dd733bc32bf9, type: 3}
+  _explosion:
+  - {fileID: 11484356, guid: 7921a819dda7db94a836dd733bc32bf9, type: 3}
+  - {fileID: 7609136272799239676, guid: 645b1f3833c3f1d4ba46fbb32f1a578c, type: 3}
   _explosionCreate: {fileID: 11484356, guid: d2a99fd7c6da9c34aba21b654a9ee0c2, type: 3}
 --- !u!114 &7671130322654351485
 MonoBehaviour:

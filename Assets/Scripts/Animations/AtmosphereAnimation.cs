@@ -8,7 +8,7 @@ namespace Animations
     {
         [SerializeField] private SimpleGrowingVertexAnimation _growingVertexAnimation;
         [SerializeField] private ScaleAnimation _scaleAnimation;
-        [SerializeField] private Explosion _explosion;
+        [SerializeField] private Explosion[] _explosion;
         [SerializeField] private Explosion _explosionCreate;
         
         public IEnumerator PlayCreateAnimation()
@@ -33,7 +33,7 @@ namespace Animations
         
         public IEnumerator PlayDestroyAnimation()
         {
-            Explosion explosion= Instantiate(_explosion); 
+            Explosion explosion = Instantiate(_explosion[Random.Range(0, _explosion.Length)]);
             explosion.Play();
 
             if (_scaleAnimation != null)
