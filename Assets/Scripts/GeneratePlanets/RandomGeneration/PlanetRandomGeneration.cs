@@ -73,8 +73,12 @@ namespace GeneratePlanets.RandomGeneration
             yield return StartCoroutine(DestroyCurrentPlanetAnimation());
             _isAnimate = true;
             _currentPlanet = planetSaver.LoadPlanet(_planetSettings, true);
-            yield return StartCoroutine(_currentPlanet.CreateAnimation());
-            yield return new WaitForEndOfFrame();
+           
+            if (_currentPlanet != null)
+            {
+                yield return StartCoroutine(_currentPlanet.CreateAnimation());
+                yield return new WaitForEndOfFrame();
+            }
 
             _isAnimate = false;
         }

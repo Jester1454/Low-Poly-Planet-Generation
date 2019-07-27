@@ -22,14 +22,17 @@ namespace GeneratePlanets
 
             ColorSettings colorSettings = LoadObjectFromJSON.Load<ColorSettings>(colorSavePath);
             ShapeSettings shapeSettings = LoadObjectFromJSON.Load<ShapeSettings>(shapeSavePath);
-           
-            if (autoCreatePlanet)
-            {
-                GameObject planetGameObject = new GameObject("planet");
-                Planet planet = planetGameObject.AddComponent<Planet>();
-                planet.GeneratePlanet(colorSettings, shapeSettings, planetSettings, true);
 
-                return planet;
+            if (colorSettings != null && shapeSettings != null)
+            {
+                if (autoCreatePlanet)
+                {
+                    GameObject planetGameObject = new GameObject("planet");
+                    Planet planet = planetGameObject.AddComponent<Planet>();
+                    planet.GeneratePlanet(colorSettings, shapeSettings, planetSettings, true);
+
+                    return planet;
+                }
             }
 
             return null;
